@@ -1,0 +1,5 @@
+# Temporary files
+~$*.pptx
+*.tmp
+__pycache__/
+.DS_Store
