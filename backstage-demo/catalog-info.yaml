@@ -1,0 +1,63 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: payment-gateway-service
+  description: Microservice critique gérant les autorisations CB, Stripe et les remboursements clients
+  tags:
+    - payments
+    - stripe
+    - nodejs
+    - critical-tier-1
+  annotations:
+    github.com/project-slug: ferid-saad/payment-gateway-service
+    backstage.io/techdocs-ref: dir:.
+    argocd/app-name: payment-gateway-prod
+    datadog/service-name: payment-gateway
+    pagerduty.com/integration-key: pd-payment-alerts-key
+spec:
+  type: service
+  lifecycle: production
+  owner: team-payments
+  system: e-commerce-core
+  providesApis:
+    - payments-api-v1
+  consumesApis:
+    - auth-tokens-v2
+  dependsOn:
+    - resource:postgres-payments-cluster
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: payments-api-v1
+  description: Spécification REST OpenAPI 3.0 des endpoints d'encaissement et de remboursement
+  tags:
+    - rest
+    - openapi
+    - v1
+spec:
+  type: openapi
+  lifecycle: production
+  owner: team-payments
+  system: e-commerce-core
+  definition: |
+    openapi: 3.0.0
+    info:
+      title: Payments API
+      version: 1.0.0
+    paths:
+      /v1/payments/charges:
+        post:
+          summary: Débiter une transaction financière
+          responses:
+            '200':
+              description: Transaction approuvée
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: e-commerce-core
+  description: Domaine regroupant le catalogue produit, le panier et le système de paiement
+spec:
+  owner: team-checkout
+  domain: digital-commerce

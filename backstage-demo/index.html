@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spotify Backstage - Internal Developer Platform (IDP) Démo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Spotify Backstage Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="backstage-logo">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="logo-icon">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+            <polyline points="2 17 12 22 22 17"></polyline>
+            <polyline points="2 12 12 17 22 12"></polyline>
+          </svg>
+          <div class="logo-text">
+            <span class="logo-title">Backstage</span>
+            <span class="logo-subtitle">Ferid Saad IDP</span>
+          </div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="#catalog" class="nav-item active" data-view="catalog">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          <span>Software Catalog</span>
+          <span class="badge" id="catalog-count-badge">8</span>
+        </a>
+        <a href="#apis" class="nav-item" data-view="apis">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+          <span>APIs Registry</span>
+        </a>
+        <a href="#docs" class="nav-item" data-view="docs">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+          <span>TechDocs</span>
+        </a>
+        <a href="#create" class="nav-item highlight" data-view="create">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+          <span>Create... (Golden Path)</span>
+        </a>
+        <div class="nav-divider"></div>
+        <a href="#code-view" class="nav-item" data-view="code-view">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+          <span>catalog-info.yaml (GitOps)</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button class="btn-demo-mode" id="btn-demo-guide">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          <span>Guide Démo (3 min)</span>
+        </button>
+        <div class="user-profile">
+          <div class="avatar">FS</div>
+          <div class="user-info">
+            <span class="user-name">Ferid Saad</span>
+            <span class="user-role">Squad Checkout Dev</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- Top Bar -->
+      <header class="topbar">
+        <div class="search-container">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="global-search" placeholder="Rechercher des composants, APIs, propriétaires ou docs... (ex: payment, auth, team-checkout)">
+        </div>
+        <div class="topbar-actions">
+          <a href="Platform_Engineering_Ferid_Saad.pptx" download class="btn-outline" style="border-color: #1db954; color: #1db954; text-decoration: none; font-weight: 600;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            Télécharger le PPT (.pptx)
+          </a>
+          <span class="env-pill production">PROD-CLUSTER</span>
+          <button class="btn-primary" onclick="navigateTo('create')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Nouveau Composant
+          </button>
+        </div>
+      </header>
+
+      <!-- View: Software Catalog -->
+      <section id="view-catalog" class="view-panel active">
+        <div class="panel-header">
+          <div>
+            <h1>Software Catalog</h1>
+            <p class="subtitle">Registre centralisé des services, APIs, bibliothèques et domaines gérés chez Ferid Saad.</p>
+          </div>
+          <div class="quick-stats">
+            <div class="stat-card">
+              <span class="stat-num" id="stat-total-services">8</span>
+              <span class="stat-label">Services</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-num">3</span>
+              <span class="stat-label">APIs</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-num text-success">99.98%</span>
+              <span class="stat-label">SLA Moyen</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="catalog-filters">
+          <div class="filter-group">
+            <label>Kind :</label>
+            <div class="pill-filters" id="kind-filters">
+              <button class="pill active" data-filter="kind" data-value="all">Tous (8)</button>
+              <button class="pill" data-filter="kind" data-value="Component">Component (5)</button>
+              <button class="pill" data-filter="kind" data-value="API">API (2)</button>
+              <button class="pill" data-filter="kind" data-value="System">System (1)</button>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <label>Lifecycle :</label>
+            <div class="pill-filters" id="lifecycle-filters">
+              <button class="pill active" data-filter="lifecycle" data-value="all">Tous</button>
+              <button class="pill" data-filter="lifecycle" data-value="production">Production</button>
+              <button class="pill" data-filter="lifecycle" data-value="experimental">Expérimental</button>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <label>Owner :</label>
+            <select id="owner-select" class="dropdown-filter">
+              <option value="all">Toutes les équipes</option>
+              <option value="team-payments">team-payments</option>
+              <option value="team-auth">team-auth</option>
+              <option value="team-checkout">team-checkout</option>
+              <option value="team-core">team-core</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Catalog Table -->
+        <div class="table-container">
+          <table class="catalog-table">
+            <thead>
+              <tr>
+                <th>Composant / Entité</th>
+                <th>Système</th>
+                <th>Owner (Équipe)</th>
+                <th>Type</th>
+                <th>Lifecycle</th>
+                <th>Santé / Uptime</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="catalog-table-body">
+              <!-- Dynamically populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- View: Entity Detail Page (ex: payment-gateway-service) -->
+      <section id="view-entity" class="view-panel">
+        <div class="entity-header">
+          <div class="breadcrumb">
+            <a href="#catalog" onclick="navigateTo('catalog')">Software Catalog</a> &gt; 
+            <span id="entity-kind-badge" class="badge">Component</span> &gt; 
+            <span id="entity-title-name">payment-gateway-service</span>
+          </div>
+          <div class="entity-title-row">
+            <div>
+              <h1 id="entity-heading-name">payment-gateway-service</h1>
+              <p id="entity-heading-desc" class="subtitle">Microservice critique gérant les autorisations CB, Stripe et les remboursements clients.</p>
+            </div>
+            <div class="entity-actions-header">
+              <a href="#" class="btn-outline" target="_blank" id="entity-github-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                GitHub Repo
+              </a>
+              <button class="btn-primary" onclick="openEntityTab('api')">Explorer l'API</button>
+            </div>
+          </div>
+
+          <!-- Entity Sub Tabs -->
+          <div class="entity-tabs">
+            <button class="entity-tab-btn active" data-tab="overview">Vue d'ensemble</button>
+            <button class="entity-tab-btn" data-tab="cicd">Pipelines CI/CD (GitHub Actions)</button>
+            <button class="entity-tab-btn" data-tab="api">Spécification API (OpenAPI)</button>
+            <button class="entity-tab-btn" data-tab="topology">Topologie & Dépendances</button>
+            <button class="entity-tab-btn" data-tab="yaml">catalog-info.yaml</button>
+          </div>
+        </div>
+
+        <!-- Entity Tab 1: Overview -->
+        <div id="tab-overview" class="entity-tab-content active">
+          <div class="entity-grid">
+            <div class="card meta-card">
+              <h3>Métadonnées du Service</h3>
+              <div class="meta-row">
+                <span class="label">Propriétaire :</span>
+                <span class="value link" id="entity-meta-owner">team-payments</span>
+              </div>
+              <div class="meta-row">
+                <span class="label">Canal Slack :</span>
+                <span class="value link">#payments-alerts</span>
+              </div>
+              <div class="meta-row">
+                <span class="label">Système parent :</span>
+                <span class="value" id="entity-meta-system">e-commerce-core</span>
+              </div>
+              <div class="meta-row">
+                <span class="label">Lifecycle :</span>
+                <span class="status-badge live" id="entity-meta-lifecycle">production</span>
+              </div>
+              <div class="meta-row">
+                <span class="label">Langage & Stack :</span>
+                <span class="value tag">TypeScript / Node.js 20</span>
+              </div>
+              <div class="meta-row">
+                <span class="label">Tags :</span>
+                <div class="tags-container" id="entity-meta-tags">
+                  <span class="tag">payments</span>
+                  <span class="tag">stripe</span>
+                  <span class="tag">critical-tier-1</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card metrics-card">
+              <h3>Observabilité & Santé en Direct</h3>
+              <div class="metrics-grid">
+                <div class="metric-item">
+                  <span class="metric-val text-success">99.98%</span>
+                  <span class="metric-lbl">Disponibilité (30j)</span>
+                </div>
+                <div class="metric-item">
+                  <span class="metric-val text-info">38 ms</span>
+                  <span class="metric-lbl">Latence P95</span>
+                </div>
+                <div class="metric-item">
+                  <span class="metric-val text-success">0.02%</span>
+                  <span class="metric-lbl">Taux d'erreur HTTP 5xx</span>
+                </div>
+                <div class="metric-item">
+                  <span class="metric-val">1.4k req/s</span>
+                  <span class="metric-lbl">Débit actuel</span>
+                </div>
+              </div>
+              <div class="monitoring-links">
+                <span class="label">Tableaux de bord liés :</span>
+                <a href="#" class="chip-link">Grafana Dashboard</a>
+                <a href="#" class="chip-link">Datadog APM</a>
+                <a href="#" class="chip-link">PagerDuty On-Call</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Entity Tab 2: CI/CD -->
+        <div id="tab-cicd" class="entity-tab-content">
+          <div class="card">
+            <div class="card-header-flex">
+              <h3>Dernières exécutions CI/CD (GitHub Actions)</h3>
+              <span class="badge success">ArgoCD : Synchronisé (In-Sync)</span>
+            </div>
+            <div class="cicd-pipeline-list">
+              <div class="pipeline-row success">
+                <div class="pipe-status-icon">✔</div>
+                <div class="pipe-info">
+                  <span class="pipe-title">feat: add idempotent key support on charge API</span>
+                  <span class="pipe-sub">Commit <code>a7f89b2</code> par Ferid Saad • Branche <code>main</code></span>
+                </div>
+                <div class="pipe-stages">
+                  <span class="stage pass">Build</span>
+                  <span class="stage pass">Test (Jest)</span>
+                  <span class="stage pass">SonarQube</span>
+                  <span class="stage pass">Docker push</span>
+                  <span class="stage pass">ArgoCD Deploy</span>
+                </div>
+                <div class="pipe-time">Il y a 22 minutes (2m 14s)</div>
+              </div>
+
+              <div class="pipeline-row success">
+                <div class="pipe-status-icon">✔</div>
+                <div class="pipe-info">
+                  <span class="pipe-title">chore: upgrade stripe-sdk to 14.1.0</span>
+                  <span class="pipe-sub">Commit <code>c9120de</code> par Sophie Martin • Branche <code>main</code></span>
+                </div>
+                <div class="pipe-stages">
+                  <span class="stage pass">Build</span>
+                  <span class="stage pass">Test (Jest)</span>
+                  <span class="stage pass">SonarQube</span>
+                  <span class="stage pass">Docker push</span>
+                  <span class="stage pass">ArgoCD Deploy</span>
+                </div>
+                <div class="pipe-time">Hier à 16:45 (2m 08s)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Entity Tab 3: API Specs -->
+        <div id="tab-api" class="entity-tab-content">
+          <div class="card">
+            <div class="card-header-flex">
+              <h3>Spécification OpenAPI (Swagger 3.0) : <code>payments-api-v1</code></h3>
+              <span class="badge info">REST API • JSON</span>
+            </div>
+            <div class="api-endpoints-preview">
+              <div class="endpoint-item post">
+                <span class="http-verb post">POST</span>
+                <span class="endpoint-path">/v1/payments/charges</span>
+                <span class="endpoint-desc">Initier un débit sécurisé avec token de carte bancaire</span>
+              </div>
+              <div class="endpoint-item get">
+                <span class="http-verb get">GET</span>
+                <span class="endpoint-path">/v1/payments/charges/{chargeId}</span>
+                <span class="endpoint-desc">Consulter le statut d'une transaction de paiement</span>
+              </div>
+              <div class="endpoint-item post">
+                <span class="http-verb post">POST</span>
+                <span class="endpoint-path">/v1/payments/refunds</span>
+                <span class="endpoint-desc">Effectuer un remboursement total ou partiel</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Entity Tab 4: Topology -->
+        <div id="tab-topology" class="entity-tab-content">
+          <div class="card">
+            <h3>Cartographie des Dépendances (Architecture Graph)</h3>
+            <p class="subtitle">Généré automatiquement à partir des relations déclarées dans le catalogue Backstage.</p>
+            <div class="topology-diagram">
+              <div class="topo-node consumer">
+                <div class="node-badge">Consommateur</div>
+                <div class="node-title">checkout-web-frontend</div>
+              </div>
+              <div class="topo-arrow">➜ Consomme API ➜</div>
+              <div class="topo-node target">
+                <div class="node-badge">Composant Actuel</div>
+                <div class="node-title">payment-gateway-service</div>
+              </div>
+              <div class="topo-arrow">➜ Dépend de ➜</div>
+              <div class="topo-node dependency">
+                <div class="node-badge">Ressource / BDD</div>
+                <div class="node-title">postgres-payments-cluster</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Entity Tab 5: YAML -->
+        <div id="tab-yaml" class="entity-tab-content">
+          <div class="card">
+            <div class="card-header-flex">
+              <h3>Manifeste Déclaratif GitOps (catalog-info.yaml)</h3>
+              <span class="badge">Versionné dans le repo Git</span>
+            </div>
+            <pre class="yaml-code-block" id="entity-yaml-display"></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- View: Create / Scaffolder (Golden Path Wizard) -->
+      <section id="view-create" class="view-panel">
+        <div class="panel-header">
+          <div>
+            <h1>Software Templates (Scaffolder)</h1>
+            <p class="subtitle">Choisissez un "Golden Path" pour créer et déployer un composant prêt pour la production en quelques clics.</p>
+          </div>
+        </div>
+
+        <!-- Template Selector Screen -->
+        <div id="scaffolder-selector" class="template-grid">
+          <div class="template-card recommended">
+            <div class="template-badge">Recommandé • Paved Road</div>
+            <h3>Microservice Node.js / Express API</h3>
+            <p>Squelette de microservice prêt pour la production avec TypeScript, Docker multi-stage, GitHub Actions CI, ArgoCD et métriques OpenTelemetry pré-câblées.</p>
+            <div class="template-tags">
+              <span class="tag">Node.js</span>
+              <span class="tag">TypeScript</span>
+              <span class="tag">Kubernetes</span>
+              <span class="tag">Fast Delivery</span>
+            </div>
+            <button class="btn-primary w-full" onclick="startScaffolder('node')">Choisir ce Template</button>
+          </div>
+
+          <div class="template-card">
+            <div class="template-badge">Cloud Native</div>
+            <h3>Spring Boot 3 Enterprise API</h3>
+            <p>API robuste Java 21 avec Spring Boot, connexion PostgreSQL managée, migration Flyway et intégration de sécurité OAuth2 / Keycloak.</p>
+            <div class="template-tags">
+              <span class="tag">Java 21</span>
+              <span class="tag">Spring Boot</span>
+              <span class="tag">PostgreSQL</span>
+            </div>
+            <button class="btn-outline w-full" onclick="startScaffolder('spring')">Choisir ce Template</button>
+          </div>
+
+          <div class="template-card">
+            <div class="template-badge">Frontend</div>
+            <h3>React + Vite Dashboard App</h3>
+            <p>Application frontend interne avec le Design System officiel d'Ferid Saad, authentification SSO et déploiement S3/CloudFront.</p>
+            <div class="template-tags">
+              <span class="tag">React</span>
+              <span class="tag">Vite</span>
+              <span class="tag">Design System</span>
+            </div>
+            <button class="btn-outline w-full" onclick="startScaffolder('react')">Choisir ce Template</button>
+          </div>
+
+          <div class="template-card">
+            <div class="template-badge">Infrastructure as Code</div>
+            <h3>Terraform Cloud Resource</h3>
+            <p>Module Terraform standardisé pour provisionner un bucket S3 sécurisé, une queue SQS ou une base DynamoDB avec conformité SOC2.</p>
+            <div class="template-tags">
+              <span class="tag">Terraform</span>
+              <span class="tag">AWS</span>
+              <span class="tag">Compliance</span>
+            </div>
+            <button class="btn-outline w-full" onclick="startScaffolder('terraform')">Choisir ce Template</button>
+          </div>
+        </div>
+
+        <!-- Scaffolder Wizard (Hidden initially) -->
+        <div id="scaffolder-wizard" class="scaffolder-wizard-container" style="display: none;">
+          <div class="wizard-header">
+            <button class="btn-back" onclick="cancelScaffolder()">← Retour aux templates</button>
+            <h2 id="wizard-template-title">Configuration du Microservice Node.js</h2>
+          </div>
+
+          <!-- Wizard Progress Bar -->
+          <div class="wizard-stepper">
+            <div class="step-item active" data-step="1">1. Informations de base</div>
+            <div class="step-item" data-step="2">2. Architecture & BDD</div>
+            <div class="step-item" data-step="3">3. Dépôt Git & Déploiement</div>
+            <div class="step-item" data-step="4">4. Exécution & Live Logs</div>
+          </div>
+
+          <!-- Step 1 -->
+          <div class="wizard-step-body active" id="step-1">
+            <div class="form-group">
+              <label>Nom du Composant *</label>
+              <input type="text" id="wiz-name" value="order-fulfillment-service" placeholder="ex: inventory-service">
+              <small>Nom unique identifiant le composant dans le catalogue.</small>
+            </div>
+            <div class="form-group">
+              <label>Description *</label>
+              <input type="text" id="wiz-desc" value="Service de préparation et d'expédition des commandes logistiques." placeholder="Courte description de la valeur métier">
+            </div>
+            <div class="form-group">
+              <label>Équipe Propriétaire (Owner) *</label>
+              <select id="wiz-owner">
+                <option value="team-checkout" selected>team-checkout</option>
+                <option value="team-payments">team-payments</option>
+                <option value="team-core">team-core</option>
+                <option value="team-auth">team-auth</option>
+              </select>
+            </div>
+            <div class="wizard-footer">
+              <div></div>
+              <button class="btn-primary" onclick="goToStep(2)">Suivant : Architecture →</button>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="wizard-step-body" id="step-2">
+            <div class="form-group">
+              <label>Base de données requise :</label>
+              <div class="radio-options">
+                <label class="radio-card">
+                  <input type="radio" name="wiz-db" value="PostgreSQL Managée (AWS Aurora)" checked>
+                  <div>
+                    <strong>PostgreSQL Managée (AWS Aurora)</strong>
+                    <p>Recommandé pour les modèles relationnels transactionnels.</p>
+                  </div>
+                </label>
+                <label class="radio-card">
+                  <input type="radio" name="wiz-db" value="Redis Cache Cluster">
+                  <div>
+                    <strong>Redis Cache Cluster</strong>
+                    <p>Pour le stockage clé-valeur et files d'attente rapides.</p>
+                  </div>
+                </label>
+                <label class="radio-card">
+                  <input type="radio" name="wiz-db" value="Aucune (Stateless)">
+                  <div>
+                    <strong>Aucune (Service Stateless)</strong>
+                    <p>Microservice sans persistance locale.</p>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Observabilité & Sécurité activées par défaut (Golden Path) :</label>
+              <ul class="guardrails-list">
+                <li>✔ Métriques Prometheus & Tracing OpenTelemetry</li>
+                <li>✔ Analyse de vulnérabilités automatique Trivy & SonarQube</li>
+                <li>✔ Fichier <code>catalog-info.yaml</code> pré-configuré</li>
+              </ul>
+            </div>
+
+            <div class="wizard-footer">
+              <button class="btn-outline" onclick="goToStep(1)">← Précédent</button>
+              <button class="btn-primary" onclick="goToStep(3)">Suivant : Dépôt Git →</button>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="wizard-step-body" id="step-3">
+            <div class="form-group">
+              <label>Organisation GitHub :</label>
+              <input type="text" value="github.com/ferid-saad" disabled class="input-disabled">
+            </div>
+            <div class="form-group">
+              <label>Nom du Dépôt Git :</label>
+              <input type="text" id="wiz-repo-name" value="order-fulfillment-service">
+            </div>
+            <div class="form-group">
+              <label>Environnement de déploiement cible :</label>
+              <select id="wiz-cluster">
+                <option value="k8s-prod-eu-west-1">Kubernetes EKS - Production (eu-west-1)</option>
+                <option value="k8s-staging">Kubernetes EKS - Staging</option>
+              </select>
+            </div>
+
+            <div class="summary-box">
+              <h4>Résumé du Golden Path qui va être exécuté :</h4>
+              <p>Backstage va cloner le template, templater le code avec vos paramètres, créer le dépôt GitHub, configurer la CI/CD GitHub Actions, et enregistrer automatiquement le service dans le catalogue.</p>
+            </div>
+
+            <div class="wizard-footer">
+              <button class="btn-outline" onclick="goToStep(2)">← Précédent</button>
+              <button class="btn-primary btn-cta" onclick="executeScaffolder()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                Lancer la Création Automatisée
+              </button>
+            </div>
+          </div>
+
+          <!-- Step 4 : Execution logs -->
+          <div class="wizard-step-body" id="step-4">
+            <h3>Exécution du Scaffolder en Temps Réel</h3>
+            <p class="subtitle">Orchestration des tâches en arrière-plan...</p>
+
+            <div class="terminal-window">
+              <div class="terminal-bar">
+                <span class="dot red"></span>
+                <span class="dot yellow"></span>
+                <span class="dot green"></span>
+                <span class="term-title">Scaffolder Task Runner #9042</span>
+              </div>
+              <div class="terminal-body" id="terminal-logs">
+                <!-- Streamed logs appear here -->
+              </div>
+            </div>
+
+            <div id="scaffolder-success-card" class="success-banner" style="display: none;">
+              <div class="success-icon">🎉</div>
+              <div>
+                <h3>Composant créé avec succès !</h3>
+                <p>Le dépôt GitHub a été initialisé, les pipelines CI/CD sont actifs, et le service est immédiatement visible dans votre catalogue.</p>
+                <div class="btn-group-success">
+                  <button class="btn-primary" onclick="viewNewComponent()">Voir dans le Software Catalog</button>
+                  <button class="btn-outline" onclick="cancelScaffolder()">Créer un autre service</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- View: APIs Registry -->
+      <section id="view-apis" class="view-panel">
+        <div class="panel-header">
+          <div>
+            <h1>APIs Registry</h1>
+            <p class="subtitle">Inventaire des contrats d'interface (REST OpenAPI, gRPC, GraphQL) déclarés dans l'entreprise.</p>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table class="catalog-table">
+            <thead>
+              <tr>
+                <th>Nom de l'API</th>
+                <th>Type</th>
+                <th>Owner</th>
+                <th>Fourni par (Provider)</th>
+                <th>Consommé par</th>
+                <th>Spécification</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>payments-api-v1</strong></td>
+                <td><span class="badge info">OpenAPI / REST</span></td>
+                <td>team-payments</td>
+                <td><code>payment-gateway-service</code></td>
+                <td><code>checkout-web-frontend</code></td>
+                <td><button class="btn-sm" onclick="navigateToEntity('payment-gateway-service', 'api')">Consulter Swagger</button></td>
+              </tr>
+              <tr>
+                <td><strong>auth-tokens-v2</strong></td>
+                <td><span class="badge purple">OAuth2 / OIDC</span></td>
+                <td>team-auth</td>
+                <td><code>auth-identity-service</code></td>
+                <td><code>Tous les services</code></td>
+                <td><span class="badge success">Vérifiée</span></td>
+              </tr>
+              <tr>
+                <td><strong>customer-events-kafka</strong></td>
+                <td><span class="badge amber">AsyncAPI / Kafka</span></td>
+                <td>team-core</td>
+                <td><code>customer-account-service</code></td>
+                <td><code>analytics-worker</code></td>
+                <td><span class="badge success">Active</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- View: TechDocs -->
+      <section id="view-docs" class="view-panel">
+        <div class="panel-header">
+          <div>
+            <h1>TechDocs (Docs-as-Code)</h1>
+            <p class="subtitle">Documentation technique rédigée en Markdown dans les dépôts Git et centralisée automatiquement.</p>
+          </div>
+        </div>
+
+        <div class="techdocs-layout">
+          <aside class="techdocs-nav">
+            <h4>Architecture & Runbooks</h4>
+            <a href="#" class="doc-link active">1. Architecture Overview</a>
+            <a href="#" class="doc-link">2. API Endpoints & Auth</a>
+            <a href="#" class="doc-link">3. Procédure d'On-Call</a>
+            <a href="#" class="doc-link">4. Runbook : Incident Stripe</a>
+            <a href="#" class="doc-link">5. Déploiement & Rollback</a>
+          </aside>
+          <article class="techdocs-content card">
+            <h2>Payment Gateway Service - Guide Technique</h2>
+            <p class="text-muted">Dernière compilation MkDocs : il y a 3 heures à partir du commit <code>a7f89b2</code>.</p>
+            <hr class="doc-hr">
+            
+            <h3>1. Rôle du composant</h3>
+            <p>Le <strong>payment-gateway-service</strong> est le point de passage obligatoire pour toute transaction financière au sein de la plateforme e-commerce. Il encapsule la complexité des PSP tiers (Stripe, Adyen, PayPal) et garantit la conformité PCI-DSS Niveau 1.</p>
+
+            <h3>2. Schéma d'Architecture</h3>
+            <div class="code-box">
+[Client Web / Mobile] 
+       │ (HTTPS / TLS 1.3)
+       ▼
+[AWS ALB Ingress] 
+       │
+       ▼
+[payment-gateway-service Pods (Autoscaling HPA 3-15 pods)]
+       ├── [PostgreSQL Aurora] (Persistance des transactions)
+       └── [Stripe API v2024] (Autorisations bancaires)
+            </div>
+
+            <h3>3. Guide de Dépannage Rapide (Troubleshooting Runbook)</h3>
+            <p>Si le taux d'erreur 5xx dépasse 1% sur Datadog :</p>
+            <ol>
+              <li>Vérifier l'état du webhook Stripe dans les logs Pod : <code>kubectl logs -n prod -l app=payment-gateway</code></li>
+              <li>Contrôler la saturation du pool de connexions PostgreSQL Aurora.</li>
+              <li>En cas d'urgence, activer le mode <em>Fallback Offline Authorization</em> via la variable <code>ENABLE_OFFLINE_FALLBACK=true</code>.</li>
+            </ol>
+          </article>
+        </div>
+      </section>
+
+      <!-- View: GitOps catalog-info.yaml Viewer -->
+      <section id="view-code-view" class="view-panel">
+        <div class="panel-header">
+          <div>
+            <h1>Catalogue sous forme de Code (GitOps / catalog-info.yaml)</h1>
+            <p class="subtitle">Backstage n'a pas de base de données propriétaire pour son catalogue : il lit les manifestes déclaratifs stockés dans Git.</p>
+          </div>
+        </div>
+
+        <div class="code-viewer-grid">
+          <div class="card">
+            <h3>Manifeste : <code>catalog-info.yaml</code> (Microservice Payment)</h3>
+            <pre class="yaml-code-block">
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: payment-gateway-service
+  description: Microservice critique d'autorisation CB et gestion des transactions
+  tags:
+    - payments
+    - stripe
+    - nodejs
+  annotations:
+    github.com/project-slug: ferid-saad/payment-gateway-service
+    backstage.io/techdocs-ref: dir:.
+    argocd/app-name: payment-gateway-prod
+    datadog/service-name: payment-gateway
+spec:
+  type: service
+  lifecycle: production
+  owner: team-payments
+  system: e-commerce-core
+  providesApis:
+    - payments-api-v1
+  consumesApis:
+    - auth-tokens-v2
+  dependsOn:
+    - resource:postgres-payments-cluster
+            </pre>
+          </div>
+
+          <div class="card">
+            <h3>Manifeste : <code>template.yaml</code> (Scaffolder Golden Path)</h3>
+            <pre class="yaml-code-block">
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: nodejs-golden-path
+  title: Microservice Node.js / Express Paved Road
+  description: Template officiel d'Ferid Saad avec CI/CD et sécurité intégrées
+spec:
+  owner: platform-team
+  type: service
+  parameters:
+    - title: Renseignez les paramètres
+      required: [name, owner]
+      properties:
+        name:
+          title: Nom du service
+          type: string
+        owner:
+          title: Équipe responsable
+          type: string
+  steps:
+    - id: template
+      name: Génération des fichiers
+      action: fetch:template
+      input:
+        url: ./skeleton
+    - id: publish
+      name: Création du dépôt GitHub
+      action: publish:github
+      input:
+        repoUrl: github.com?repo=${{ parameters.name }}
+    - id: register
+      name: Enregistrement dans Backstage
+      action: catalog:register
+            </pre>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Interactive Demo Script Modal for the Student during Presentation -->
+  <div class="modal-overlay" id="demo-guide-modal" style="display: none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2>Aide-Mémoire pour la Démonstration Live (3 à 5 minutes)</h2>
+        <button class="modal-close" onclick="toggleDemoGuide()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="guide-step">
+          <span class="guide-time">Minute 0 - 1 : Software Catalog</span>
+          <h4>Ce qu'il faut dire et montrer :</h4>
+          <p><em>« Voici le Software Catalog de Backstage. C'est le portail unique (Single Pane of Glass). Fini les services orphelins : ici, chaque microservice a un propriétaire identifié, un statut de santé et un lien vers son repo. Si je clique sur <strong>payment-gateway-service</strong>, j'accède immédiatement à ses métriques, ses pipelines CI/CD et sa doc technique. »</em></p>
+        </div>
+        <div class="guide-step">
+          <span class="guide-time">Minute 1 - 3 : Le Scaffolder (Golden Path)</span>
+          <h4>Ce qu'il faut dire et montrer :</h4>
+          <p><em>« Passons maintenant au cœur du Platform Engineering : le <strong>Scaffolder</strong>. Pour éliminer les tickets Jira et standardiser les pratiques, nous offrons des 'Golden Paths'. En cliquant sur <strong>Create...</strong>, le développeur choisit le template Node.js, saisit son nom de service et sa base de données. En un clic, Backstage génère le repo Git, la CI/CD et la conformité sécurité en 30 secondes. »</em></p>
+        </div>
+        <div class="guide-step">
+          <span class="guide-time">Minute 3 - 4 : TechDocs & GitOps</span>
+          <h4>Ce qu'il faut dire et montrer :</h4>
+          <p><em>« Enfin, la documentation est intégrée via <strong>TechDocs</strong> (Docs-as-Code). Tout repose sur le fichier <strong>catalog-info.yaml</strong> : aucune base de données opaque, tout est versionné dans Git selon les principes GitOps. »</em></p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-primary" onclick="toggleDemoGuide()">Fermer et continuer la démo</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
