@@ -1,0 +1,16 @@
+﻿apiVersion: backstage.io/v1alpha1
+kind: Component
+
+metadata:
+  name: ${{ values.componentName }}
+  description: ${{ values.description }}
+  tags:
+    - nextjs
+    - docker
+    - devops
+    - portfolio
+
+spec:
+  type: website
+  lifecycle: experimental
+  owner: ${{ values.owner }}

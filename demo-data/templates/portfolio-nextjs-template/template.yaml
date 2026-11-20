@@ -1,0 +1,65 @@
+﻿apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+
+metadata:
+  name: portfolio-nextjs-template
+  title: Portfolio Next.js
+  description: Golden Path pour générer une application Portfolio Next.js avec Docker
+  tags:
+    - nextjs
+    - react
+    - docker
+    - platform-engineering
+
+spec:
+  owner: team-payments
+  type: website
+
+  parameters:
+    - title: Informations du Portfolio
+      required:
+        - componentName
+      properties:
+        componentName:
+          title: Nom du projet
+          type: string
+          description: Nom du dépôt et du composant Backstage
+          default: portfolio-nextjs
+          pattern: '^[a-z0-9]+(-[a-z0-9]+)*$'
+
+        description:
+          title: Description
+          type: string
+          default: Portfolio professionnel développé avec Next.js
+
+        owner:
+          title: Équipe responsable
+          type: string
+          default: team-payments
+
+  steps:
+    - id: fetch
+      name: Génération du projet Next.js
+      action: fetch:template
+      input:
+        url: ./skeleton
+        values:
+          componentName: ${{ parameters.componentName }}
+          description: ${{ parameters.description }}
+          owner: ${{ parameters.owner }}
+
+    #- id: confirmation
+     # name: Confirmation de génération
+      #action: debug:log
+      #input:
+       # message: >-
+        #  Le projet ${{ parameters.componentName }}
+         # a été généré avec succès.
+
+  output:
+    text:
+      - title: Portfolio généré
+        content: >-
+          Le squelette du projet ${{ parameters.componentName }}
+          a été généré. Tu peux récupérer les fichiers
+          depuis les résultats de la tâche Scaffolder.

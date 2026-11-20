@@ -1,0 +1,45 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: nodejs-paved-road
+  title: "Microservice Node.js / Express Paved Road"
+  description: Golden Path pour créer un microservice conforme aux standards
+spec:
+  owner: team-payments
+  type: service
+  parameters:
+    - title: Informations du projet
+      required: [repoName, database]
+      properties:
+        repoName:
+          title: Nom du repo
+          type: string
+        database:
+          title: Base de données
+          type: string
+          enum: [PostgreSQL, MySQL, MongoDB]
+        monitoring:
+          title: Activer le monitoring
+          type: boolean
+          default: true
+  steps:
+    - id: fetch
+      name: Génération du projet depuis le skeleton
+      action: fetch:template
+      input:
+        url: ./skeleton
+        values:
+          repoName: ${{ parameters.repoName }}
+          database: ${{ parameters.database }}
+
+    - id: log
+      name: Confirmation
+      action: debug:log
+      input:
+        message: "Projet ${{ parameters.repoName }} généré avec succès (monitoring=${{ parameters.monitoring }})"
+
+    - id: pause
+      name: Pause pour inspection (démo)
+      action: debug:wait
+      input:
+        seconds: 3600

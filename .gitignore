@@ -54,3 +54,9 @@ e2e-test-report/
 
 # Cache
 .cache/
+
+# Backup files
+*.bak
+
+# Local scripts containing credentials
+start-backstage.ps1

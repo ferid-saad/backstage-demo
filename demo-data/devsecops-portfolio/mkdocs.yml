@@ -1,0 +1,5 @@
+site_name: devsecops-portfolio
+nav:
+  - Accueil: index.md
+plugins:
+  - techdocs-core

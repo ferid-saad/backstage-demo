@@ -1,0 +1,27 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: payment-gateway-service
+  description: Microservice critique gérant les autorisations CB, Stripe
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+  links:
+    - url: https://github.com/ferid-saad/payment-gateway-service
+      title: Repository
+spec:
+  type: service
+  lifecycle: production
+  owner: team-payments
+  system: e-commerce-core
+  providesApis:
+    - payment-gateway-api
+  dependsOn:
+    - resource:default/postgresql-payments
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: postgresql-payments
+spec:
+  type: database
+  owner: team-payments

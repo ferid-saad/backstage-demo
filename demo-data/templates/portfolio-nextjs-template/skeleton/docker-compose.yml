@@ -1,0 +1,12 @@
+﻿services:
+  portfolio:
+    image: ${DOCKERHUB_USERNAME:-local}/${COMPONENT_NAME:-portfolio-nextjs}:${IMAGE_TAG:-latest}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ${COMPONENT_NAME:-portfolio-nextjs}
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production

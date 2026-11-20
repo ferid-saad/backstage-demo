@@ -1,0 +1,12 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: demo-nginx-app
+  description: Application de démonstration nginx déployée sur Kubernetes (admin-ansible)
+  annotations:
+    backstage.io/kubernetes-id: demo-nginx-app
+    backstage.io/techdocs-ref: dir:.
+spec:
+  type: website
+  lifecycle: experimental
+  owner: ferid-saad

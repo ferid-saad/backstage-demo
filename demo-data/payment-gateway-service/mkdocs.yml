@@ -1,0 +1,5 @@
+site_name: payment-gateway-service
+nav:
+  - Accueil: index.md
+plugins:
+  - techdocs-core

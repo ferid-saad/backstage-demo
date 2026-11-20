@@ -1,0 +1,16 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: devsecops-portfolio
+  description: Portfolio DevSecOps migré vers Next.js, avec API Express, Docker et pipeline Jenkins
+  links:
+    - url: https://github.com/ferid-saad/devsecops-portfolio
+      title: Repository GitHub
+      icon: github
+  annotations:
+    jenkins.io/job-full-name: devsecops-portfolio
+    backstage.io/techdocs-ref: dir:.
+spec:
+  type: website
+  lifecycle: experimental
+  owner: ferid-saad

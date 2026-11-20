@@ -1,0 +1,12 @@
+site_name: Portfolio Next.js
+site_description: Documentation technique du projet Portfolio Next.js
+repo_url: https://github.com/ferid-saad/portfolio-nextjs
+edit_uri: edit/main/demo-data/portfolio-nextjs/docs/
+docs_dir: docs
+nav:
+  - Accueil: index.md
+  - Architecture: architecture.md
+  - Pipeline CI/CD: cicd-pipeline.md
+  - Déploiement: deployment.md
+plugins:
+  - techdocs-core
