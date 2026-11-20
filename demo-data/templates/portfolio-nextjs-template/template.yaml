@@ -4,12 +4,13 @@ kind: Template
 metadata:
   name: portfolio-nextjs-template
   title: Portfolio Next.js
-  description: Golden Path pour générer une application Portfolio Next.js avec Docker
+  description: Golden Path pour générer une application Portfolio Next.js avec Docker et GitHub
   tags:
     - nextjs
     - react
     - docker
     - platform-engineering
+    - github
 
 spec:
   owner: team-payments
@@ -19,6 +20,7 @@ spec:
     - title: Informations du Portfolio
       required:
         - componentName
+        - repoUrl
       properties:
         componentName:
           title: Nom du projet
@@ -37,6 +39,14 @@ spec:
           type: string
           default: team-payments
 
+        repoUrl:
+          title: Dépôt GitHub
+          type: string
+          ui:field: RepoUrlPicker
+          ui:options:
+            allowedHosts:
+              - github.com
+
   steps:
     - id: fetch
       name: Génération du projet Next.js
@@ -48,18 +58,32 @@ spec:
           description: ${{ parameters.description }}
           owner: ${{ parameters.owner }}
 
-    #- id: confirmation
-     # name: Confirmation de génération
-      #action: debug:log
-      #input:
-       # message: >-
-        #  Le projet ${{ parameters.componentName }}
-         # a été généré avec succès.
+    - id: publish
+      name: Publication sur GitHub
+      action: publish:github
+      input:
+        repoUrl: ${{ parameters.repoUrl }}
+        description: ${{ parameters.description }}
+        defaultBranch: main
+        sourcePath: .
+
+    - id: register
+      name: Enregistrement dans le Software Catalog
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
+        catalogInfoPath: /catalog-info.yaml
 
   output:
+    links:
+      - title: Ouvrir le dépôt GitHub
+        url: ${{ steps.publish.output.remoteUrl }}
+      - title: Ouvrir le composant dans Backstage
+        icon: catalog
+        entityRef: ${{ steps.register.output.entityRef }}
+
     text:
-      - title: Portfolio généré
+      - title: Portfolio généré et publié
         content: >-
-          Le squelette du projet ${{ parameters.componentName }}
-          a été généré. Tu peux récupérer les fichiers
-          depuis les résultats de la tâche Scaffolder.
+          Le projet ${{ parameters.componentName }} a été généré,
+          publié sur GitHub et enregistré dans le Software Catalog.
